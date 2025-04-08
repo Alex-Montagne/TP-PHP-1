@@ -8,7 +8,7 @@ try {
 
 #Exercice 1
 
-$sqlQuery = 'INSERT INTO users (username, password,age) VALUES ("Martin", 1234,30)';
+$sqlQuery = 'INSERT INTO users (username, password, age) VALUES ("Martin", 1234, 30)';
 $usersStatement = $mysqlClient->prepare($sqlQuery);
 $usersStatement->execute();
 
@@ -16,7 +16,7 @@ echo "Nouvel utilisateur inséré ave l'ID: ".$mysqlClient->lastInsertId()."\n";
 
 #Exercice 2
 
-$sqlQuery = 'INSERT INTO users (username, password,age) VALUES ("Luc", 2468,42)';
+$sqlQuery = 'INSERT INTO users (username, password, age) VALUES ("Luc", 2468, 42)';
 $usersStatement = $mysqlClient->prepare($sqlQuery);
 $usersStatement->execute();
 
