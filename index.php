@@ -1,48 +1,73 @@
 <?php
 
-try {
-    $mysqlClient = new PDO('mysql:host=localhost;dbname=BDD;charset=utf8', 'root', '');
-} catch (Exception $e) {
-    die("Erreur de connexion à la base de données : " . $e->getMessage());
+// Classe parente
+class Vehicule {
+    protected $_marque;
+    protected $_modele;
+    protected $_annee;
+    
+    public function __construct($marque, $modele, $annee) {
+        $this->_marque = $marque;
+        $this->_modele = $modele;
+        $this->_annee = $annee;
+    }
+    
+    public function getInfos() {
+        echo $this->_marque." ";
+        echo $this->_modele." ";
+        echo $this->_annee." ";
+    }
+    
+    public function demarrer() {
+        return "Le véhicule démarre.";
+    }
 }
 
-#Exercice 1
+// Classe enfant qui hérite de Vehicule
+class Voiture extends Vehicule {
+    private $_nombrePortes;
+    private $_typeCarburant;
+    
+    public function __construct($marque, $modele, $annee, $nombrePortes, $typeCarburant) {
+        // Appel du constructeur parent
+            parent::__construct($marque, $modele, $annee);
 
-$sqlQuery = 'INSERT INTO users (username, password, age) VALUES ("Martin", 1234, 30)';
-$usersStatement = $mysqlClient->prepare($sqlQuery);
-$usersStatement->execute();
+        // Initialisation des propriétés spécifiques
+            $this->_nombrePortes = $nombrePortes;
+            $this->_typeCarburant = $typeCarburant;
+    }
 
-echo "Nouvel utilisateur inséré ave l'ID: ".$mysqlClient->lastInsertId()."\n";
-
-#Exercice 2
-
-$sqlQuery = 'INSERT INTO users (username, password, age) VALUES ("Luc", 2468, 42)';
-$usersStatement = $mysqlClient->prepare($sqlQuery);
-$usersStatement->execute();
-
-$sqlQuery = 'SELECT * FROM users WHERE age > 30';
-$usersStatement = $mysqlClient->prepare($sqlQuery);
-$usersStatement->execute();
-
-$users = $usersStatement->fetchAll(PDO::FETCH_ASSOC);
-
-echo "Utilisateurs de plus de 30 ans : \n";
-foreach ($users as $user) {
-    echo "Nom: ".$user['username']." - Age: ".$user['age']."\n";
+    // Surcharge de la méthode getInfos()
+    public function getInfos() {
+        parent::getInfos();
+        echo $this->_nombrePortes." ";
+        echo $this->_typeCarburant."\n";
+    }
+    
+    // Méthode spécifique
+    public function klaxonner() {
+        echo "bip bip";
+    }
 }
 
-#Exercice 3
+// Classe enfant qui hérite de Vehicule
+class Moto extends Vehicule {
+    private $_cylindree;
+    
+    public function __construct($marque, $modele, $annee, $cylindree) {
+            parent::__construct($marque, $modele, $annee);
+            $this->_cylindree = $cylindree;
+    }
 
-$sqlQuery = "UPDATE users SET age = 31 WHERE id = 1";
-$usersStatement = $mysqlClient->prepare($sqlQuery);
-$usersStatement->execute();
+    public function getInfos() {
+        parent::getInfos();
+        echo $this->_cylindree."\n";
+    }
+}
 
-echo "Nombre d'utilisateurs mis à jour: ".$usersStatement->rowCount()."\n";
+// Utilisation des classes
+$voiture = new Voiture("Renault", "Clio", 2020, 5, "Essence");
+$moto = new Moto("Aprilia", "RS660",2021, "659cm3");
 
-#Exercice 4
-
-$sqlQuery = "DELETE FROM users WHERE id = 2";
-$usersStatement = $mysqlClient->prepare($sqlQuery);
-$usersStatement->execute();
-
-echo "Nombre d'utilisateurs supprimés: ".$usersStatement->rowCount()."\n";
+$voiture -> getInfos();
+$moto -> getInfos();
