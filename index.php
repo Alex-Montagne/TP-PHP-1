@@ -1,48 +1,75 @@
 <?php
 
-try {
-    $mysqlClient = new PDO('mysql:host=localhost;dbname=BDD;charset=utf8', 'root', '');
-} catch (Exception $e) {
-    die("Erreur de connexion à la base de données : " . $e->getMessage());
+class Personne {
+    private $_nom;
+    private $_prenom;
+    private $_age;
+    
+     // Constructeur
+
+    public function __construct($prenom,$nom,$age){
+        $this->_prenom = $prenom;
+        $this->_nom = $nom;
+        $this->_age = $age;
+    }
+
+    // Getters (accesseurs)
+
+    public function getNom(){
+        return $this->_nom;
+    }
+
+    public function getPrenom(){
+        return $this->_prenom;
+    }
+
+    public function getAge(){
+        return $this->_age;
+    }
+
+    // Setters (mutateurs)
+
+    public function setNom($nouvNom){
+        $this->_nom = $nouvNom;
+    }
+
+    public function setPrenom($nouvPrenom){
+        $this->_prenom = $nouvPrenom;
+    }
+
+    public function setAge($nouvAge){
+        $this->_age = $nouvAge;
+    }
+
+     // Méthodes
+
+    public function sePresenter(){
+        echo "Bonjour, je suis ".$this->GetPrenom()." ".$this->GetNom().", j'ai ".$this->GetAge()." ans. \n";
+    }
+    
+    public function estMajeur(){
+        if($this->_age < 18){
+            echo "Cette personne n'est pas majeure. \n";
+        }
+        else{
+            echo "Cette personne est majeure. \n";
+        }
+    }
 }
 
-#Exercice 1
+// Utilisation de la classe
 
-$sqlQuery = 'INSERT INTO users (username, password, age) VALUES ("Martin", 1234, 30)';
-$usersStatement = $mysqlClient->prepare($sqlQuery);
-$usersStatement->execute();
+$personne1 = new Personne("Jean","Dupond",40);
+$personne2 = new Personne("Marc","Moulin",17);
 
-echo "Nouvel utilisateur inséré ave l'ID: ".$mysqlClient->lastInsertId()."\n";
+$personne1 -> sePresenter();
+$personne2 -> sePresenter();
 
-#Exercice 2
+$personne1 -> estMajeur();
+$personne2 -> estMajeur();
 
-$sqlQuery = 'INSERT INTO users (username, password, age) VALUES ("Luc", 2468, 42)';
-$usersStatement = $mysqlClient->prepare($sqlQuery);
-$usersStatement->execute();
+// Modification des propriétés
 
-$sqlQuery = 'SELECT * FROM users WHERE age > 30';
-$usersStatement = $mysqlClient->prepare($sqlQuery);
-$usersStatement->execute();
-
-$users = $usersStatement->fetchAll(PDO::FETCH_ASSOC);
-
-echo "Utilisateurs de plus de 30 ans : \n";
-foreach ($users as $user) {
-    echo "Nom: ".$user['username']." - Age: ".$user['age']."\n";
-}
-
-#Exercice 3
-
-$sqlQuery = "UPDATE users SET age = 31 WHERE id = 1";
-$usersStatement = $mysqlClient->prepare($sqlQuery);
-$usersStatement->execute();
-
-echo "Nombre d'utilisateurs mis à jour: ".$usersStatement->rowCount()."\n";
-
-#Exercice 4
-
-$sqlQuery = "DELETE FROM users WHERE id = 2";
-$usersStatement = $mysqlClient->prepare($sqlQuery);
-$usersStatement->execute();
-
-echo "Nombre d'utilisateurs supprimés: ".$usersStatement->rowCount()."\n";
+$personne1 -> setNom("Dupont");
+$personne1 -> setAge(41);
+$personne1 -> sePresenter();
